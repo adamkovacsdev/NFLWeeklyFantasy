@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">NFLWeeklyFantasy</string>
+    <string name="nfl_logo_desc">NFL logo</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="signup_label">Don\'t have an account? Sign up!</string>
+</resources>

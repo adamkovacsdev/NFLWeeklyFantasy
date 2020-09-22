@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout tools:context=".Activities.MainActivity"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/nfllogo"
+        android:contentDescription="@string/nfl_logo_desc"
+        android:id="@+id/iv_nflheader" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintVertical_bias="0.113"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/iv_nflheader"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:textAllCaps="true"
+        android:text="Signup" />
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        app:layout_constraintVertical_bias="0.097"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/et_signup_username"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:hint="@string/username" />
+
+    <EditText
+        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        app:layout_constraintVertical_bias="0.097"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/et_signup_email"
+        app:layout_constraintTop_toBottomOf="@+id/et_signup_username"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        android:hint="Email" />
+
+    <EditText
+        android:layout_height="40dp"
+        android:layout_width="150dp"
+        app:layout_constraintVertical_bias="0.12"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/et_signup_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_signup_email"
+        android:inputType="textPassword"
+        android:textAlignment="center"
+        android:hint="@string/password" />
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintVertical_bias="0.189"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/btn_signup_register"
+        app:layout_constraintTop_toBottomOf="@+id/et_signup_password"
+        android:text="Signup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintVertical_bias="0.835"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/tv_signup_login"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signup_register"
+        android:textStyle="italic"
+        android:text="Already have an account? Sign in!"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true"
+        android:layout_marginBottom="36dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
