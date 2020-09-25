@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        
 
         tv_signUp.setOnClickListener(new View.OnClickListener() {
             @Override
