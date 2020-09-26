@@ -9,12 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.EditUserActivity"></activity>
-        <activity android:name=".Activities.WeeklyPickEmActivity" />
-        <activity android:name=".Activities.LeaderboardActivity" />
-        <activity android:name=".Activities.MainScreenActivity" />
-        <activity android:name=".Activities.SignUpActivity" />
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name=".Activities.EditUserActivity" android:label="Edit user"></activity>
+        <activity android:name=".Activities.WeeklyPickEmActivity" android:label="Weekly Pick'Em"/>
+        <activity android:name=".Activities.LeaderboardActivity" android:label="Leaderboard"/>
+        <activity android:name=".Activities.MainScreenActivity" android:label="NFL Weekly Fantasy"/>
+        <activity android:name=".Activities.SignUpActivity" android:label="Sign up"/>
+        <activity android:name=".Activities.MainActivity" android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

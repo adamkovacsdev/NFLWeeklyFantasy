@@ -38,13 +38,15 @@
             android:id="@+id/rb_home_team_selected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"/>
+            android:paddingTop="30dp"
+            android:paddingLeft="10dp"/>
 
         <RadioButton
             android:id="@+id/rb_away_team_selected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"/>
+            android:paddingTop="30dp"
+            android:paddingLeft="10dp"/>
     </RadioGroup>
     <TextView
         android:id="@+id/tv_weekly_awayteam_score"

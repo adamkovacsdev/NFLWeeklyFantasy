@@ -47,6 +47,7 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+        //TODO: the selector is still bugged, multiple rbuttons being selected by changing only one. find a fix
         convertView = null; // without this line all the radio buttons would change if you change any of them
 
         if(convertView == null) {
@@ -63,7 +64,6 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
 
 
             homeLogo = convertView.findViewById(R.id.iv_weekly_hometeam);
-          //  homeLogo.setImageResource(R.drawable.ic_logo_placeholder);
             TextView homeName = convertView.findViewById(R.id.tv_weekly_hometeam_nameshort);
             homeName.setText(homeTeam);
             TextView homeScore = convertView.findViewById(R.id.tv_weekly_hometeam_score);
@@ -76,7 +76,6 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
             TextView awayName = convertView.findViewById(R.id.tv_weekly_awayteam_nameshort);
             awayName.setText(awayTeam);
             awayLogo = convertView.findViewById(R.id.iv_weekly_awayteam);
-         //   awayLogo.setImageResource(R.drawable.ic_logo_placeholder);
 
             setTeamLogos(homeTeam,awayTeam);
 
@@ -88,7 +87,7 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
             if(currentMatch.isHomeSelected()){
                 rb_homeSelected.setChecked(true);
                 rb_awaySelected.setChecked(false);
-            } else {
+            } else if(currentMatch.isAwaySelected()){
                 rb_homeSelected.setChecked(false);
                 rb_awaySelected.setChecked(true);
             }
@@ -142,6 +141,58 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
             homeLogo.setImageResource(R.drawable.sf);
         } else if(homeTeam.equals("SEA")){
             homeLogo.setImageResource(R.drawable.sea);
+        } else if(homeTeam.equals("ARI")){
+            homeLogo.setImageResource(R.drawable.ari);
+        } else if(homeTeam.equals("ATL")){
+            homeLogo.setImageResource(R.drawable.atl);
+        } else if(homeTeam.equals("BUF")){
+            homeLogo.setImageResource(R.drawable.buf);
+        } else if(homeTeam.equals("CAR")){
+            homeLogo.setImageResource(R.drawable.car);
+        } else if(homeTeam.equals("CHI")){
+            homeLogo.setImageResource(R.drawable.chi);
+        } else if(homeTeam.equals("CIN")){
+            homeLogo.setImageResource(R.drawable.cin);
+        } else if(homeTeam.equals("CLE")){
+            homeLogo.setImageResource(R.drawable.cle);
+        } else if(homeTeam.equals("DAL")){
+            homeLogo.setImageResource(R.drawable.dal);
+        } else if(homeTeam.equals("DEN")){
+            homeLogo.setImageResource(R.drawable.den);
+        } else if(homeTeam.equals("DET")){
+            homeLogo.setImageResource(R.drawable.det);
+        } else if(homeTeam.equals("HOU")){
+            homeLogo.setImageResource(R.drawable.hou);
+        } else if(homeTeam.equals("IND")){
+            homeLogo.setImageResource(R.drawable.ind);
+        } else if(homeTeam.equals("JAX")){
+            homeLogo.setImageResource(R.drawable.jax);
+        } else if(homeTeam.equals("LAC")){
+            homeLogo.setImageResource(R.drawable.lac);
+        } else if(homeTeam.equals("LAR")){
+            homeLogo.setImageResource(R.drawable.lar);
+        } else if(homeTeam.equals("LV")){
+            homeLogo.setImageResource(R.drawable.lv);
+        } else if(homeTeam.equals("MIA")){
+            homeLogo.setImageResource(R.drawable.mia);
+        } else if(homeTeam.equals("MIN")){
+            homeLogo.setImageResource(R.drawable.min);
+        } else if(homeTeam.equals("NYG")){
+            homeLogo.setImageResource(R.drawable.nyg);
+        } else if(homeTeam.equals("NYJ")){
+            homeLogo.setImageResource(R.drawable.nyj);
+        } else if(homeTeam.equals("PHI")){
+            homeLogo.setImageResource(R.drawable.phi);
+        } else if(homeTeam.equals("PIT")){
+            homeLogo.setImageResource(R.drawable.pit);
+        } else if(homeTeam.equals("TB")){
+            homeLogo.setImageResource(R.drawable.tb);
+        } else if(homeTeam.equals("TEN")){
+            homeLogo.setImageResource(R.drawable.ten);
+        } else if(homeTeam.equals("WAS")){
+            homeLogo.setImageResource(R.drawable.was);
+        } else if(homeTeam.equals("NE")){
+            homeLogo.setImageResource(R.drawable.ne);
         }
 
         if(awayTeam.equals("KC")){
@@ -156,8 +207,58 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
             awayLogo.setImageResource(R.drawable.sf);
         } else if(awayTeam.equals("SEA")){
             awayLogo.setImageResource(R.drawable.sea);
+        } else if(awayTeam.equals("ARI")){
+            awayLogo.setImageResource(R.drawable.ari);
+        } else if(awayTeam.equals("ATL")){
+            awayLogo.setImageResource(R.drawable.atl);
+        } else if(awayTeam.equals("BUF")){
+            awayLogo.setImageResource(R.drawable.buf);
+        } else if(awayTeam.equals("CAR")){
+            awayLogo.setImageResource(R.drawable.car);
+        } else if(awayTeam.equals("CHI")){
+            awayLogo.setImageResource(R.drawable.chi);
+        } else if(awayTeam.equals("CIN")){
+            awayLogo.setImageResource(R.drawable.cin);
+        } else if(awayTeam.equals("CLE")){
+            awayLogo.setImageResource(R.drawable.cle);
+        } else if(awayTeam.equals("DAL")){
+            awayLogo.setImageResource(R.drawable.dal);
+        } else if(awayTeam.equals("DEN")){
+            awayLogo.setImageResource(R.drawable.den);
+        } else if(awayTeam.equals("DET")){
+            awayLogo.setImageResource(R.drawable.det);
+        } else if(awayTeam.equals("HOU")){
+            awayLogo.setImageResource(R.drawable.hou);
+        } else if(awayTeam.equals("IND")){
+            awayLogo.setImageResource(R.drawable.ind);
+        } else if(awayTeam.equals("JAX")){
+            awayLogo.setImageResource(R.drawable.jax);
+        } else if(awayTeam.equals("LAC")){
+            awayLogo.setImageResource(R.drawable.lac);
+        } else if(awayTeam.equals("LAR")){
+            awayLogo.setImageResource(R.drawable.lar);
+        } else if(awayTeam.equals("LV")){
+            awayLogo.setImageResource(R.drawable.lv);
+        } else if(awayTeam.equals("MIA")){
+            awayLogo.setImageResource(R.drawable.mia);
+        } else if(awayTeam.equals("MIN")){
+            awayLogo.setImageResource(R.drawable.min);
+        } else if(awayTeam.equals("NYG")){
+            awayLogo.setImageResource(R.drawable.nyg);
+        } else if(awayTeam.equals("NYJ")){
+            awayLogo.setImageResource(R.drawable.nyj);
+        } else if(awayTeam.equals("PHI")){
+            awayLogo.setImageResource(R.drawable.phi);
+        } else if(awayTeam.equals("PIT")){
+            awayLogo.setImageResource(R.drawable.pit);
+        } else if(awayTeam.equals("TB")){
+            awayLogo.setImageResource(R.drawable.tb);
+        } else if(awayTeam.equals("TEN")){
+            awayLogo.setImageResource(R.drawable.ten);
+        } else if(awayTeam.equals("WAS")){
+            awayLogo.setImageResource(R.drawable.was);
+        } else if(awayTeam.equals("NE")){
+            awayLogo.setImageResource(R.drawable.ne);
         }
-
-
     }
 }

@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import xyz.adamkovacs.nflweeklyfantasy.Classes.User;
 import xyz.adamkovacs.nflweeklyfantasy.Database.UserContract.UserEntry;
 import xyz.adamkovacs.nflweeklyfantasy.Database.WeeklySelectionsContract.WeeklySelectionEntry;
 
@@ -157,5 +161,29 @@ public class NFLDatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return score;
+    }
+
+    public List<User> getUsers(){
+        String selectQuery = "SELECT * FROM " + UserEntry.TABLE_NAME+";";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        ArrayList<User> users = new ArrayList<>();
+        String username="";
+        String email="";
+        String password="";
+        int weeklyScore=0;
+        if(cursor != null){
+            if(cursor.moveToFirst()){
+                do{
+                    username = cursor.getString(cursor.getColumnIndex("username"));
+                    email = cursor.getString(cursor.getColumnIndex("email"));
+                    password = cursor.getString(cursor.getColumnIndex("password"));
+                    weeklyScore = cursor.getInt(cursor.getColumnIndex("weekly_score"));
+                    users.add(new User(username,email,password,weeklyScore));
+                }while (cursor.moveToNext());
+            }
+        }
+
+        return users;
     }
 }

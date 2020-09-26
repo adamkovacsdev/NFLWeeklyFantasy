@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 
@@ -38,6 +39,7 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
     String week_current_url="https://api.sportsdata.io/v3/nfl/scores/json/CurrentWeek"+api_key;
     String week_current="";
     String matches_url="https://api.sportsdata.io/v3/nfl/scores/json/ScoresByWeek/"+season+"/"+week_current+api_key;
+    RadioGroup rg_selection;
 
 
 
@@ -49,16 +51,27 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
 
         dbHelper = new NFLDatabaseHelper(this);
         listView = findViewById(R.id.weekly_list_view);
+        rg_selection = findViewById(R.id.rg_selector);
 
         matchList = new ArrayList<Match>();
         sortedMatchList = new ArrayList<>();
-        Match oneMatch = new Match(1,"KC",0,false,"BAL",0,true,Calendar.getInstance().getTime());
-        Match oneMatch1 = new Match(1,"GB",0,true,"NO",0,false,Calendar.getInstance().getTime());
-        Match oneMatch2 = new Match(2,"SF",0,true,"SEA",0,false,Calendar.getInstance().getTime());
-        matchList.add(oneMatch);
-        matchList.add(oneMatch1);
-        matchList.add(oneMatch2);
-        Log.i("teszt",oneMatch.toString());
+
+        matchList.add(new Match(3,"MIA",31,false,"JAX",13,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"CHI",0,false,"ATL",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"LAR",0,false,"BUF",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"WAS",0,false,"CLE",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"TEN",0,false,"MIN",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"LV",0,false,"NE",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"SF",0,false,"NYG",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"CIN",0,false,"PHI",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"HOU",0,false,"PIT",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"NYJ",0,false,"IND",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"CAR",0,false,"LAC",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"DET",0,false,"ARI",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"TB",0,false,"DEN",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"DAL",0,false,"SEA",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"GB",0,false,"NO",0,false,Calendar.getInstance().getTime()));
+        matchList.add(new Match(3,"KC",0,false,"BAL",0,false,Calendar.getInstance().getTime()));
 
 
         sp_weeks = findViewById(R.id.sp_weekly);
@@ -96,5 +109,6 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
 
             }
         });
+
     }
 }
