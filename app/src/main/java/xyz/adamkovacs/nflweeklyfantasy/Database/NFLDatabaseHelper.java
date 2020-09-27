@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.adamkovacs.nflweeklyfantasy.Classes.Match;
 import xyz.adamkovacs.nflweeklyfantasy.Classes.User;
 import xyz.adamkovacs.nflweeklyfantasy.Database.UserContract.UserEntry;
 import xyz.adamkovacs.nflweeklyfantasy.Database.WeeklySelectionsContract.WeeklySelectionEntry;
@@ -17,7 +18,7 @@ import xyz.adamkovacs.nflweeklyfantasy.Database.WeeklySelectionsContract.WeeklyS
 public class NFLDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "NFLDatabase";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
 
     // Creating user table
@@ -29,7 +30,6 @@ public class NFLDatabaseHelper extends SQLiteOpenHelper {
 
     // Create table for weekly teams picked by user
     private static final String CREATE_TABLE_WEEKLY="CREATE TABLE "+ WeeklySelectionEntry.TABLE_NAME+" ("
-            +WeeklySelectionEntry._ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "
             +WeeklySelectionEntry.COLUMN_WEEK+" TEXT, "
             +WeeklySelectionEntry.COLUMN_HOMETEAM+" TEXT, "
             +WeeklySelectionEntry.COLUMN_IS_HOMETEAM_SELECTED+" INTEGER, "
@@ -74,19 +74,23 @@ public class NFLDatabaseHelper extends SQLiteOpenHelper {
     public void AddWeeklySelected(String username, String week, String hometeam, int isHomeTeam,
                                   String awayteam, int isAwayTeam){
         boolean weeklyAlreadyInDb = isWeeklyUserSelected(username,week,hometeam,awayteam);
+        Log.i("database","weeklyAlreadyindb: "+weeklyAlreadyInDb);
+        SQLiteDatabase db = this.getWritableDatabase();
         ContentValues newWeekly = new ContentValues();
-        newWeekly.put(WeeklySelectionEntry.COLUMN_USERNAME, username);
         newWeekly.put(WeeklySelectionEntry.COLUMN_WEEK, week);
         newWeekly.put(WeeklySelectionEntry.COLUMN_HOMETEAM, hometeam);
         newWeekly.put(WeeklySelectionEntry.COLUMN_IS_HOMETEAM_SELECTED, isHomeTeam);
         newWeekly.put(WeeklySelectionEntry.COLUMN_AWAYTEAM, awayteam);
         newWeekly.put(WeeklySelectionEntry.COLUMN_IS_AWAYTEAM_SELECTED, isAwayTeam);
-        SQLiteDatabase db = this.getWritableDatabase();
+        newWeekly.put(WeeklySelectionEntry.COLUMN_USERNAME, username);
         if(!weeklyAlreadyInDb) {
             db.insertWithOnConflict(WeeklySelectionEntry.TABLE_NAME, null, newWeekly, SQLiteDatabase.CONFLICT_IGNORE);
+            Log.i("database","Adding weekly to db.");
             db.close();
         } else {
             db.update(WeeklySelectionEntry.TABLE_NAME,newWeekly,WeeklySelectionEntry.COLUMN_USERNAME+"='"+username+"' AND "+WeeklySelectionEntry.COLUMN_WEEK+"='"+week+"' AND "+WeeklySelectionEntry.COLUMN_HOMETEAM+"='"+hometeam+"' AND "+WeeklySelectionEntry.COLUMN_AWAYTEAM+"='"+awayteam+"'",null);
+            Log.i("database","Updating weekly to db.");
+            db.close();
         }
     }
 
@@ -100,11 +104,12 @@ public class NFLDatabaseHelper extends SQLiteOpenHelper {
         if(cursor != null){
             if(cursor.moveToFirst()){
                 do{
-                    selected += "Username: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_USERNAME))+" Week: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_WEEK)) +" Hometeam: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_HOMETEAM))+" IsHomeSelected: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_IS_HOMETEAM_SELECTED)) +" Awayteam: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_AWAYTEAM))+" IsAwayTeamSelected: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_IS_AWAYTEAM_SELECTED));
+                    selected += "Username: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_USERNAME))+" Week: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_WEEK)) +" Hometeam: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_HOMETEAM))+" IsHomeSelected: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_IS_HOMETEAM_SELECTED)) +" Awayteam: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_AWAYTEAM))+" IsAwayTeamSelected: "+ cursor.getString(cursor.getColumnIndex(WeeklySelectionEntry.COLUMN_IS_AWAYTEAM_SELECTED))+"\r\n";
 
                 }while(cursor.moveToNext());
             }
         }
+        db.close();
         return selected;
     }
 
@@ -135,6 +140,7 @@ public class NFLDatabaseHelper extends SQLiteOpenHelper {
                 +" AND "+WeeklySelectionEntry.COLUMN_AWAYTEAM+"='"+awayteam+"';";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+        Log.i("database","Selectquery: "+selectQuery);
         if(cursor != null){
             if(cursor.moveToFirst()){
                 return true;
@@ -185,5 +191,32 @@ public class NFLDatabaseHelper extends SQLiteOpenHelper {
         }
 
         return users;
+    }
+
+    public List<Match> getMatches(){
+        String selectQuery = "SELECT * FROM " + WeeklySelectionEntry.TABLE_NAME+";";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        ArrayList<Match> matches = new ArrayList<>();
+        String week;
+        String home;
+        int homeselect;
+        String away;
+        int awayselect;
+        String username;
+        if(cursor != null){
+            if(cursor.moveToFirst()){
+                do{
+                    week = cursor.getString(cursor.getColumnIndex("week"));
+                    home = cursor.getString(cursor.getColumnIndex("hometeam"));
+                    homeselect = cursor.getInt(cursor.getColumnIndex("is_hometeam_selected"));
+                    away = cursor.getString(cursor.getColumnIndex("awayteam"));
+                    awayselect = cursor.getInt(cursor.getColumnIndex("is_awayteam_selected"));
+                    username = cursor.getString(cursor.getColumnIndex("username"));
+                    matches.add(new Match(week,home,homeselect,away,awayselect,username));
+                }while (cursor.moveToNext());
+            }
+        }
+        return matches;
     }
 }

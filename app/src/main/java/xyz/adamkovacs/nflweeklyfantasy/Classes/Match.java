@@ -8,12 +8,12 @@ import java.util.Date;
 
 public class Match {
 
-    int weekNumber;
-    String homeTeam, awayTeam;
-    Date matchStart;
-    Switch switchForMatch;
-    int homeScore, awayScore;
-    boolean homeSelected, awaySelected;
+    private int weekNumber;
+    private String homeTeam,awayTeam,username;
+    private Date matchStart;
+    private int homeScore,awayScore,homeSelectedint,awaySelectedInt;
+    private boolean homeSelected,awaySelected;
+    private String week;
 
     public Match(int weekNumber, String homeTeam, int homeScore, boolean homeSelected, String awayTeam,
                  int awayScore, boolean awaySelected, Date matchStart){
@@ -25,6 +25,26 @@ public class Match {
         this.awayScore=awayScore;
         this.awaySelected=awaySelected;
         this.matchStart=matchStart;
+    }
+
+    public Match(int weekNumber, String homeTeam, int homeScore, boolean homeSelected, String awayTeam,
+                 int awayScore, boolean awaySelected){
+        this.weekNumber=weekNumber;
+        this.homeTeam=homeTeam;
+        this.homeScore=homeScore;
+        this.homeSelected=homeSelected;
+        this.awayTeam=awayTeam;
+        this.awayScore=awayScore;
+        this.awaySelected=awaySelected;
+    }
+
+    public Match(String week, String homeTeam,int homeSelectedint, String awayTeam, int awaySelectedInt, String username){
+        this.week=week;
+        this.homeTeam=homeTeam;
+        this.homeSelectedint=homeSelectedint;
+        this.awayTeam=awayTeam;
+        this.awaySelectedInt=awaySelectedInt;
+        this.username=username;
     }
 
     public int getWeekNumber() {
@@ -94,6 +114,6 @@ public class Match {
     @NonNull
     @Override
     public String toString() {
-        return "Week"+weekNumber+", team: "+homeTeam+", awayTeam: "+awayTeam+", match start: "+matchStart;
+        return "Week"+weekNumber+", hometeam: "+homeTeam+", homescore: "+homeScore+",homeselected: "+homeSelected+", awayTeam: "+awayTeam+", awayscore: "+awayScore+", awayselected: "+awaySelected+",user: ";
     }
 }

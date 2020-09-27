@@ -33,6 +33,7 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
     RadioButton rb_homeSelected, rb_awaySelected;
     RadioGroup rg_selector;
     ImageView homeLogo, awayLogo;
+    List<Match> matches;
 
     public WeeklyPickEmAdapter(Context context, int resource, List<Match> matches, String username, String selectedWeek) {
         super(context, resource, matches);
@@ -40,15 +41,15 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
         this.resourceLayout=resource;
         this.username=username;
         this.selectedWeek=selectedWeek;
+        this.matches=matches;
         Log.i("teszt","Adapter constructor");
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         //TODO: the selector is still bugged, multiple rbuttons being selected by changing only one. find a fix
-        convertView = null; // without this line all the radio buttons would change if you change any of them
 
         if(convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -59,70 +60,77 @@ public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
         final Match currentMatch = getItem(position);
 
         if(currentMatch !=null){
-            final String homeTeam = currentMatch.getHomeTeam();
-            final String awayTeam = currentMatch.getAwayTeam();
+            if(currentMatch == matches.get(position)) {
+                final String homeTeam = currentMatch.getHomeTeam();
+                final String awayTeam = currentMatch.getAwayTeam();
 
 
-            homeLogo = convertView.findViewById(R.id.iv_weekly_hometeam);
-            TextView homeName = convertView.findViewById(R.id.tv_weekly_hometeam_nameshort);
-            homeName.setText(homeTeam);
-            TextView homeScore = convertView.findViewById(R.id.tv_weekly_hometeam_score);
-            String scoreStr = Integer.toString(currentMatch.getHomeScore());
-            homeScore.setText(scoreStr);
+                homeLogo = convertView.findViewById(R.id.iv_weekly_hometeam);
+                TextView homeName = convertView.findViewById(R.id.tv_weekly_hometeam_nameshort);
+                homeName.setText(homeTeam);
+                TextView homeScore = convertView.findViewById(R.id.tv_weekly_hometeam_score);
+                String scoreStr = Integer.toString(currentMatch.getHomeScore());
+                homeScore.setText(scoreStr);
 
-            TextView awayScore = convertView.findViewById(R.id.tv_weekly_awayteam_score);
-            String scoreStr1 = Integer.toString(currentMatch.getAwayScore());
-            awayScore.setText(scoreStr1);
-            TextView awayName = convertView.findViewById(R.id.tv_weekly_awayteam_nameshort);
-            awayName.setText(awayTeam);
-            awayLogo = convertView.findViewById(R.id.iv_weekly_awayteam);
+                TextView awayScore = convertView.findViewById(R.id.tv_weekly_awayteam_score);
+                String scoreStr1 = Integer.toString(currentMatch.getAwayScore());
+                awayScore.setText(scoreStr1);
+                TextView awayName = convertView.findViewById(R.id.tv_weekly_awayteam_nameshort);
+                awayName.setText(awayTeam);
+                awayLogo = convertView.findViewById(R.id.iv_weekly_awayteam);
 
-            setTeamLogos(homeTeam,awayTeam);
+                setTeamLogos(homeTeam, awayTeam);
 
-            rb_homeSelected = convertView.findViewById(R.id.rb_home_team_selected);
-            rb_awaySelected = convertView.findViewById(R.id.rb_away_team_selected);
+                rb_homeSelected = convertView.findViewById(R.id.rb_home_team_selected);
+                rb_awaySelected = convertView.findViewById(R.id.rb_away_team_selected);
 
-            rg_selector = convertView.findViewById(R.id.rg_selector);
+                rg_selector = convertView.findViewById(R.id.rg_selector);
 
-            if(currentMatch.isHomeSelected()){
-                rb_homeSelected.setChecked(true);
-                rb_awaySelected.setChecked(false);
-            } else if(currentMatch.isAwaySelected()){
-                rb_homeSelected.setChecked(false);
-                rb_awaySelected.setChecked(true);
-            }
-
-            rg_selector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup group, int checkedId) {
-                    if(checkedId == R.id.rb_home_team_selected){
-                        rb_homeSelected.setChecked(true);
-                        rb_awaySelected.setChecked(false);
-                        currentMatch.setHomeSelected(true);
-                        currentMatch.setAwaySelected(false);
-                        Log.i("teszt1","Hometeam: "+currentMatch.getHomeTeam()+" (selected: "+currentMatch.isHomeSelected()+" -should be: true)"+", awayteam: "+currentMatch.getAwayTeam()+" (selected: "+currentMatch.isAwaySelected()+" -should be false)\r\n");
-                        awaySelected = 0; // false
-                        homeSelected = 1;
-                        dbHelper.AddWeeklySelected(username,selectedWeek,homeTeam,homeSelected,awayTeam,awaySelected);
-                        String adatb = dbHelper.WhatsInDatabase();
-                        Log.i("teszt",adatb);
-                        Toast.makeText(group.getContext(), "Selected team: " + homeTeam, Toast.LENGTH_SHORT).show();
-
-                    } else if (checkedId == R.id.rb_away_team_selected){
-                        rb_awaySelected.setChecked(true);
-                        rb_homeSelected.setChecked(false);
-                        currentMatch.setAwaySelected(true);
-                        currentMatch.setHomeSelected(false);
-                        Log.i("teszt1","Hometeam: "+currentMatch.getHomeTeam()+" (selected: "+currentMatch.isHomeSelected()+" -should be: false)"+", awayteam: "+currentMatch.getAwayTeam()+" (selected: "+currentMatch.isAwaySelected()+" -should be true)\r\n");
-                        awaySelected = 1; // true
-                        homeSelected = 0; // false
-                        dbHelper.AddWeeklySelected(username, selectedWeek, homeTeam, homeSelected, awayTeam, awaySelected);
-                        String adatb = dbHelper.WhatsInDatabase();
-                        Log.i("teszt",adatb+"\r\n");
-                        Toast.makeText(group.getContext(), "Selected team: " + awayTeam, Toast.LENGTH_SHORT).show();
-                    }
+                if (currentMatch.isHomeSelected()) {
+                    rb_homeSelected.setChecked(true);
+                    rb_awaySelected.setChecked(false);
+                } else if (currentMatch.isAwaySelected()) {
+                    rb_homeSelected.setChecked(false);
+                    rb_awaySelected.setChecked(true);
                 }
-            });
+
+                rg_selector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        if (checkedId == R.id.rb_home_team_selected) {
+                            if(currentMatch == matches.get(position)) {
+                                rb_homeSelected.setChecked(true);
+                                rb_awaySelected.setChecked(false);
+                                currentMatch.setHomeSelected(true);
+                                currentMatch.setAwaySelected(false);
+                                awaySelected = 0; // false
+                                homeSelected = 1;
+                                dbHelper.AddWeeklySelected(username, selectedWeek, homeTeam, homeSelected, awayTeam, awaySelected);
+                                Toast.makeText(group.getContext(), "Selected team: " + homeTeam, Toast.LENGTH_SHORT).show();
+
+                                notifyDataSetChanged();
+                            }
+
+
+                        } else if (checkedId == R.id.rb_away_team_selected) {
+                            if(currentMatch == matches.get(position)){
+                                rb_awaySelected.setChecked(true);
+                                rb_homeSelected.setChecked(false);
+                                currentMatch.setAwaySelected(true);
+                                currentMatch.setHomeSelected(false);
+                                awaySelected = 1; // true
+                                homeSelected = 0; // false
+                                dbHelper.AddWeeklySelected(username, selectedWeek, homeTeam, homeSelected, awayTeam, awaySelected);
+                                Toast.makeText(group.getContext(), "Selected team: " + awayTeam, Toast.LENGTH_SHORT).show();
+
+                                notifyDataSetChanged();
+                            }
+
+                        }
+                    }
+                });
+            }
+            notifyDataSetChanged();
         }
 
         return convertView;

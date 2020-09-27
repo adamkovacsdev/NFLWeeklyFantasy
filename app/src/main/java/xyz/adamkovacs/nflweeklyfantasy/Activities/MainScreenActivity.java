@@ -3,11 +3,20 @@ package xyz.adamkovacs.nflweeklyfantasy.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import xyz.adamkovacs.nflweeklyfantasy.Database.NFLDatabaseHelper;
 import xyz.adamkovacs.nflweeklyfantasy.R;
@@ -36,7 +45,6 @@ public class MainScreenActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         username = intent.getStringExtra("Username");
-        Log.i("test", "Username: " + username);
         tv_loggedinuser.setText(username);
         tv_welcometext.append(username + "!");
         weeklypoints = dbHelper.getUserWeeklyPoints(username);
@@ -57,6 +65,7 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), WeeklyPickEmActivity.class);
+                i.putExtra("Username", username);
                 if(i.resolveActivity(getPackageManager()) != null)
                     startActivity(i);
             }

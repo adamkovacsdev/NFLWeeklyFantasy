@@ -29,17 +29,9 @@ public class LeaderboardActivity extends AppCompatActivity {
         dbHelper = new NFLDatabaseHelper(this);
         listView = findViewById(R.id.leaderboard_list_view);
         usersList = dbHelper.getUsers();
-      /*  usersList = new ArrayList<>();
-        usersList.add(new User("justluck4","emailcim","pw",100));
-        usersList.add(new User("justluck1","emailcim","pw",400));
-        usersList.add(new User("justluck3","emailcim","pw",200));
-        usersList.add(new User("justluck2","emailcim","pw",350));*/
-
 
         leaderboardAdapter = new LeaderboardAdapter(this,R.layout.leaderboard_item,usersList);
         listView.setAdapter(leaderboardAdapter);
-
-
 
     }
 }

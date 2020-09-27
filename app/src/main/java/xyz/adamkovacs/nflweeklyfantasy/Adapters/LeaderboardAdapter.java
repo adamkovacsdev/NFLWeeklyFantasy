@@ -37,7 +37,6 @@ public class LeaderboardAdapter extends ArrayAdapter<User> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        Log.i("teszt","Leaderboard adapter getView entered");
         if(convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(resourceLayout, null);
@@ -47,8 +46,6 @@ public class LeaderboardAdapter extends ArrayAdapter<User> {
          User currentUser = getItem(position);
 
         if(currentUser !=null){
-
-            Log.i("teszt","CurrentUser: "+currentUser.toString());
 
             TextView tv_placement = convertView.findViewById(R.id.tv_leaderboard_placement);
             tv_placement.setText(currentUser.getPlacement());
