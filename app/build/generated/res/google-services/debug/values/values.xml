@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">209491482769-3g7djiphr6sq522g4r3ju0uerber13sa.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://nflweeklyfantasy.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">209491482769</string>
+    <string name="google_api_key" translatable="false">AIzaSyDgLll65y78taV-52Js_V9iu8kzIvtjT80</string>
+    <string name="google_app_id" translatable="false">1:209491482769:android:7592cb5b39eadbdcfd4730</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDgLll65y78taV-52Js_V9iu8kzIvtjT80</string>
+    <string name="google_storage_bucket" translatable="false">nflweeklyfantasy.appspot.com</string>
+    <string name="project_id" translatable="false">nflweeklyfantasy</string>
+</resources>

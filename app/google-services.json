@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "209491482769",
+    "firebase_url": "https://nflweeklyfantasy.firebaseio.com",
+    "project_id": "nflweeklyfantasy",
+    "storage_bucket": "nflweeklyfantasy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209491482769:android:7592cb5b39eadbdcfd4730",
+        "android_client_info": {
+          "package_name": "xyz.adamkovacs.nflweeklyfantasy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209491482769-h89k3qmatge515f3hm8v0of1erqge3e5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "xyz.adamkovacs.nflweeklyfantasy",
+            "certificate_hash": "94594f99c554f183da95b4bedca369bfc881d4a7"
+          }
+        },
+        {
+          "client_id": "209491482769-3g7djiphr6sq522g4r3ju0uerber13sa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgLll65y78taV-52Js_V9iu8kzIvtjT80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209491482769-3g7djiphr6sq522g4r3ju0uerber13sa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
