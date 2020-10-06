@@ -14,9 +14,7 @@
         <activity android:name=".Activities.EditUserActivity" android:label="Edit user"></activity>
         <activity android:name=".Activities.WeeklyPickEmActivity" android:label="Weekly Pick'Em"/>
         <activity android:name=".Activities.LeaderboardActivity" android:label="Leaderboard"/>
-        <activity android:name=".Activities.MainScreenActivity" android:label="NFL Weekly Fantasy"/>
-        <activity android:name=".Activities.SignUpActivity" android:label="Sign up"/>
-        <activity android:name=".Activities.MainActivity" android:label="Login">
+        <activity android:name=".Activities.MainActivity" android:label="NFL Weekly Fantasy">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

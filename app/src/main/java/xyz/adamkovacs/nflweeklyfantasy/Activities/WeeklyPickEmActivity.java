@@ -44,7 +44,7 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
     NFLDatabaseHelper dbHelper;
     String username;
     String selectedWeek;
-    String api_key="";  // ADD YOUR OWN API KEY HERE!
+    String api_key="?key=";  // ADD YOUR OWN API KEY HERE!
     String season="2020REG";
     String week_current_url="https://api.sportsdata.io/v3/nfl/scores/json/CurrentWeek"+api_key;
     String week_current;
