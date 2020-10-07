@@ -14,6 +14,10 @@ public class Match {
     private int homeScore,awayScore,homeSelectedint,awaySelectedInt;
     private String homeSelected,awaySelected;
     private String week;
+    private Date startDate;
+    private String startDateStr;
+    private boolean isOver;
+
 
     public Match(int weekNumber, String homeTeam, int homeScore, String homeSelected, String awayTeam,
                  int awayScore, String awaySelected, String matchStart){
@@ -36,6 +40,25 @@ public class Match {
         this.awayTeam=awayTeam;
         this.awayScore=awayScore;
         this.awaySelected=awaySelected;
+    }
+
+    public String getStartDateStr() {
+        return startDateStr;
+    }
+
+    public void setStartDateStr(String startDateStr) {
+        this.startDateStr = startDateStr;
+    }
+
+    public Match(String startDate, int weekNumber, String homeTeam, int homeScore, String awayTeam,
+                 int awayScore, boolean isOver){
+        this.startDateStr=startDate;
+        this.weekNumber=weekNumber;
+        this.homeTeam=homeTeam;
+        this.homeScore=homeScore;
+        this.awayTeam=awayTeam;
+        this.awayScore=awayScore;
+        this.isOver=isOver;
     }
 
     public Match(String week, String homeTeam,int homeSelectedint, String awayTeam, int awaySelectedInt, String username){
@@ -110,6 +133,22 @@ public class Match {
 
     public void setIsAwaySelected(String awaySelected) {
         this.awaySelected = awaySelected;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public boolean isOver() {
+        return isOver;
+    }
+
+    public void setOver(boolean over) {
+        isOver = over;
     }
 
     @NonNull

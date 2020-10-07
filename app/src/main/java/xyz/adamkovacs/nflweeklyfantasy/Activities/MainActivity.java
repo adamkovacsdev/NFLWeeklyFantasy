@@ -5,14 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +27,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
-import xyz.adamkovacs.nflweeklyfantasy.Database.NFLDatabaseHelper;
 import xyz.adamkovacs.nflweeklyfantasy.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_welcometext, tv_weeklypoints, tv_loggedinuser, tv_logout;
     String username;
     int weeklypoints;
-    NFLDatabaseHelper dbHelper;
+    ImageView iv_matches,iv_weeklypickem,iv_leaderboard,iv_profile,iv_logout;
     Button btn_weekly, btn_leaderboard;
     String mUsername;
     FirebaseDatabase firebaseDatabase;
@@ -51,6 +47,13 @@ public class MainActivity extends AppCompatActivity {
     String uid;
     int value;
 
+    //TODO: Make changes to the UI. On the top welcome the user as it is.
+    //TODO: Below add imageview (have to be created in photoshop) as wide as the parent view.
+    //Scores
+    //Weekly Pick'Em
+    //Leaderboard
+    //Profile
+    //Logout
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +62,16 @@ public class MainActivity extends AppCompatActivity {
 
         mUsername = "anonymous";
         tv_welcometext = findViewById(R.id.tv_main_welcometext);
-        tv_weeklypoints = findViewById(R.id.tv_main_weeklypoints);
-        tv_loggedinuser = findViewById(R.id.tv_main_loggedinuser);
-        tv_logout = findViewById(R.id.tv_main_logout);
-        btn_weekly = findViewById(R.id.btn_main_weekly);
-        btn_leaderboard = findViewById(R.id.btn_main_leaderboard);
+
+        iv_matches = findViewById(R.id.iv_iv_main_matches);
+        iv_weeklypickem = findViewById(R.id.iv_main_weeklypickem);
+        iv_leaderboard = findViewById(R.id.iv_main_leaderboards);
+        iv_profile = findViewById(R.id.iv_main_profile);
+        iv_logout = findViewById(R.id.iv_main_logout);
 
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         myFirebaseAuth = FirebaseAuth.getInstance();
-
-        dbHelper = new NFLDatabaseHelper(this);
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
                                             new AuthUI.IdpConfig.EmailBuilder().build()))
+                                    .setLogo(R.drawable.nfllogo)
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -168,13 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onSignedIn(String username){
         mUsername = username;
-        welcome_msg = "Welcome, "+username+"!";
-        Log.i("username","Username: "+username);
-        tv_loggedinuser.setText(username);
-        tv_welcometext.setText(welcome_msg);
-        tv_weeklypoints.setText(Integer.toString(weeklypoints));
-        Log.i("value","WeeklyPoints in onSignedIn is: "+weeklypoints);
-        tv_logout.setOnClickListener(new View.OnClickListener() {
+        iv_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AuthUI.getInstance().signOut(MainActivity.this);
@@ -182,10 +179,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_weekly.setOnClickListener(new View.OnClickListener() {
+        iv_matches.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), WeeklyPickEmActivity.class);
+                Intent i = new Intent(getApplicationContext(), WeeklyMatchesActivity.class);
                 i.putExtra("uid",uid);
                 i.putExtra("weeklyPoints",weeklypoints);
                 if(i.resolveActivity(getPackageManager()) != null)
@@ -193,20 +190,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_leaderboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), LeaderboardActivity.class);
-                if(i.resolveActivity(getPackageManager()) != null)
-                    startActivity(i);
-            }
-        });
+       iv_leaderboard.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent i = new Intent(getApplicationContext(), LeaderboardActivity.class);
+               if(i.resolveActivity(getPackageManager()) != null)
+                   startActivity(i);
+           }
+       });
+
         attachDatabaseReadListener();
     }
 
     private void onSignedOut(){
         mUsername = "anonymous";
-        welcome_msg = "";
+        weeklypoints = 0;
         Toast.makeText(MainActivity.this,"Logged out!",Toast.LENGTH_SHORT).show();
         detachDatabaseReadListener();
     }

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.EditUserActivity" android:label="Edit user"></activity>
-        <activity android:name=".Activities.WeeklyPickEmActivity" android:label="Weekly Pick'Em"/>
+        <activity android:name=".Activities.WeeklyMatchesActivity" android:label="Matches"/>
         <activity android:name=".Activities.LeaderboardActivity" android:label="Leaderboard"/>
         <activity android:name=".Activities.MainActivity" android:label="NFL Weekly Fantasy">
             <intent-filter>

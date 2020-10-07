@@ -14,24 +14,28 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import xyz.adamkovacs.nflweeklyfantasy.Classes.Match;
 import xyz.adamkovacs.nflweeklyfantasy.Classes.User;
-import xyz.adamkovacs.nflweeklyfantasy.Database.NFLDatabaseHelper;
 import xyz.adamkovacs.nflweeklyfantasy.R;
 
 public class LeaderboardAdapter extends ArrayAdapter<User> {
 
     int resourceLayout;
     Context context;
-    NFLDatabaseHelper dbHelper;
+    List<User> users;
 
     public LeaderboardAdapter(@NonNull Context context, int resource, List<User> users) {
         super(context, resource,users);
         this.context=context;
         this.resourceLayout=resource;
+        this.users=users;
     }
+
 
     @NonNull
     @Override
@@ -40,7 +44,6 @@ public class LeaderboardAdapter extends ArrayAdapter<User> {
         if(convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(resourceLayout, null);
-            dbHelper = new NFLDatabaseHelper(context);
         }
 
          User currentUser = getItem(position);
@@ -56,8 +59,15 @@ public class LeaderboardAdapter extends ArrayAdapter<User> {
             tv_score.setText(userScore);
 
             ImageView iv_placement = convertView.findViewById(R.id.iv_leaderboard_placement);
-            iv_placement.setImageResource(R.drawable.ic_logo_placeholder);
-
+            if(position == 0){
+                iv_placement.setImageResource(R.drawable.firstplace);
+            } else if ( position == 1){
+                iv_placement.setImageResource(R.drawable.secondplace);
+            } else if (position == 2){
+                iv_placement.setImageResource(R.drawable.thirdplace);
+            } else {
+                iv_placement.setImageResource(R.drawable.notintop3);
+            }
         }
 
         return convertView;

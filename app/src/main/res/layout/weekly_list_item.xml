@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="100dp"
     android:padding="10dp">
 
 
     <ImageView
-        android:id="@+id/iv_weekly_hometeam"
+        android:id="@+id/iv_weekly_awayteam"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/tv_weekly_hometeam_nameshort"
+        android:id="@+id/tv_weekly_awayteam_nameshort"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
@@ -21,42 +22,37 @@
         android:paddingLeft="15dp"
         />
     <TextView
-        android:id="@+id/tv_weekly_hometeam_score"
+        android:id="@+id/tv_weekly_awayteam_score"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
         android:paddingLeft="15dp"/>
 
-    <RadioGroup
-        android:id="@+id/rg_selector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/rb_home_team_selected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:paddingLeft="10dp"/>
-
-        <RadioButton
-            android:id="@+id/rb_away_team_selected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:paddingLeft="10dp"/>
-    </RadioGroup>
     <TextView
-        android:id="@+id/tv_weekly_awayteam_score"
+        android:id="@+id/tv_weekly_at_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:text="@"
+        android:textColor="#c2c2c2"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:textAllCaps="true" />
+
+    <TextView
+        android:id="@+id/tv_weekly_hometeam_score"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
-        android:paddingRight="15dp"/>
+        android:paddingLeft="25dp"/>
     <TextView
-        android:id="@+id/tv_weekly_awayteam_nameshort"
+        android:id="@+id/tv_weekly_hometeam_nameshort"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
@@ -64,7 +60,7 @@
         android:paddingRight="15dp" />
 
     <ImageView
-        android:id="@+id/iv_weekly_awayteam"
+        android:id="@+id/iv_weekly_hometeam"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content" />

@@ -2,7 +2,7 @@ package xyz.adamkovacs.nflweeklyfantasy.Classes;
 
 import java.util.ArrayList;
 
-public class User {
+public class User implements Comparable {
 
     String username;
     String email;
@@ -21,8 +21,9 @@ public class User {
         this.placement=placement;
     }
 
-    public User(String username){
+    public User(String username, int weekly_score){
         this.username=username;
+        this.weekly_score=weekly_score;
     }
 
 
@@ -58,4 +59,19 @@ public class User {
     public void setPlacement(String placement) {
         this.placement = placement;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", weekly_score=" + weekly_score +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Object user) {
+        int points = ((User) user).getWeekly_score();
+        return points-this.getWeekly_score();
+    }
 }
+
