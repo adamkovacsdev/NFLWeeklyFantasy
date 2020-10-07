@@ -1,6 +1,7 @@
 package xyz.adamkovacs.nflweeklyfantasy.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import xyz.adamkovacs.nflweeklyfantasy.Classes.Match;
 import xyz.adamkovacs.nflweeklyfantasy.Database.NFLDatabaseHelper;
@@ -25,113 +31,126 @@ import xyz.adamkovacs.nflweeklyfantasy.R;
 
 public class WeeklyPickEmAdapter extends ArrayAdapter<Match> {
 
-    int resourceLayout;
-    Context context;
-    NFLDatabaseHelper dbHelper;
-    String username, selectedWeek;
-    int homeSelected, awaySelected;
-    RadioButton rb_homeSelected, rb_awaySelected;
-    RadioGroup rg_selector;
-    ImageView homeLogo, awayLogo;
-    List<Match> matches;
+    private int resourceLayout;
+    private Context context;
+    private String uid, selectedWeek;
+    private ImageView homeLogo, awayLogo;
+    private List<Match> matches;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
 
-    public WeeklyPickEmAdapter(Context context, int resource, List<Match> matches, String username, String selectedWeek) {
+    private static class ViewHolder{
+        private TextView homeTeam;
+        private TextView homeScore;
+        private RadioButton homeSelected;
+        private RadioButton awaySelected;
+        private TextView awayScore;
+        private TextView awayTeam;
+    }
+
+    public WeeklyPickEmAdapter(Context context, int resource, List<Match> matches, String uid, String selectedWeek) {
         super(context, resource, matches);
         this.context=context;
         this.resourceLayout=resource;
-        this.username=username;
+        this.uid=uid;
         this.selectedWeek=selectedWeek;
         this.matches=matches;
-        Log.i("teszt","Adapter constructor");
     }
 
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
+        final ViewHolder viewHolder;
+        firebaseDatabase = FirebaseDatabase.getInstance();
         //TODO: the selector is still bugged, multiple rbuttons being selected by changing only one. find a fix
-
-        if(convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            convertView = inflater.inflate(resourceLayout, null);
-            dbHelper = new NFLDatabaseHelper(context);
-        }
 
         final Match currentMatch = getItem(position);
 
-        if(currentMatch !=null){
-            if(currentMatch == matches.get(position)) {
-                final String homeTeam = currentMatch.getHomeTeam();
-                final String awayTeam = currentMatch.getAwayTeam();
+        if(convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            convertView = inflater.inflate(resourceLayout,parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.homeTeam = convertView.findViewById(R.id.tv_weekly_hometeam_nameshort);
+            viewHolder.homeScore = convertView.findViewById(R.id.tv_weekly_hometeam_score);
+            viewHolder.homeSelected = convertView.findViewById(R.id.rb_home_team_selected);
+            viewHolder.awaySelected = convertView.findViewById(R.id.rb_away_team_selected);
+            viewHolder.awayScore = convertView.findViewById(R.id.tv_weekly_awayteam_score);
+            viewHolder.awayTeam = convertView.findViewById(R.id.tv_weekly_awayteam_nameshort);
 
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        if(currentMatch !=null){
+
+            Log.i("testadapter","uid: "+uid+", selectedweek: "+selectedWeek);
+
+                final String homeTeamStr = currentMatch.getHomeTeam();
+                final String awayTeamStr = currentMatch.getAwayTeam();
 
                 homeLogo = convertView.findViewById(R.id.iv_weekly_hometeam);
-                TextView homeName = convertView.findViewById(R.id.tv_weekly_hometeam_nameshort);
-                homeName.setText(homeTeam);
-                TextView homeScore = convertView.findViewById(R.id.tv_weekly_hometeam_score);
+                viewHolder.homeTeam.setText(homeTeamStr);
                 String scoreStr = Integer.toString(currentMatch.getHomeScore());
-                homeScore.setText(scoreStr);
-
-                TextView awayScore = convertView.findViewById(R.id.tv_weekly_awayteam_score);
+                viewHolder.homeScore.setText(scoreStr);
                 String scoreStr1 = Integer.toString(currentMatch.getAwayScore());
-                awayScore.setText(scoreStr1);
-                TextView awayName = convertView.findViewById(R.id.tv_weekly_awayteam_nameshort);
-                awayName.setText(awayTeam);
+                viewHolder.awayScore.setText(scoreStr1);
+                viewHolder.awayTeam.setText(awayTeamStr);
                 awayLogo = convertView.findViewById(R.id.iv_weekly_awayteam);
 
-                setTeamLogos(homeTeam, awayTeam);
+                setTeamLogos(homeTeamStr, awayTeamStr);
 
-                rb_homeSelected = convertView.findViewById(R.id.rb_home_team_selected);
-                rb_awaySelected = convertView.findViewById(R.id.rb_away_team_selected);
-
-                rg_selector = convertView.findViewById(R.id.rg_selector);
-
-                if (currentMatch.isHomeSelected()) {
-                    rb_homeSelected.setChecked(true);
-                    rb_awaySelected.setChecked(false);
-                } else if (currentMatch.isAwaySelected()) {
-                    rb_homeSelected.setChecked(false);
-                    rb_awaySelected.setChecked(true);
+                if(currentMatch.getHomeScore() > currentMatch.getAwayScore()){
+                    convertView.setBackgroundColor(Color.parseColor("#a1f7d0"));
                 }
+
+                RadioGroup rg_selector = convertView.findViewById(R.id.rg_selector);
 
                 rg_selector.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
+
                         if (checkedId == R.id.rb_home_team_selected) {
-                            if(currentMatch == matches.get(position)) {
-                                rb_homeSelected.setChecked(true);
-                                rb_awaySelected.setChecked(false);
-                                currentMatch.setHomeSelected(true);
-                                currentMatch.setAwaySelected(false);
-                                awaySelected = 0; // false
-                                homeSelected = 1;
-                                dbHelper.AddWeeklySelected(username, selectedWeek, homeTeam, homeSelected, awayTeam, awaySelected);
-                                Toast.makeText(group.getContext(), "Selected team: " + homeTeam, Toast.LENGTH_SHORT).show();
 
-                                notifyDataSetChanged();
-                            }
+                            viewHolder.homeSelected.setChecked(true);
+                            viewHolder.awaySelected.setChecked(false);
+                            currentMatch.setIsHomeSelected("1");
+                            currentMatch.setIsAwaySelected("0");
+                            Toast.makeText(group.getContext(), "Selected team: " + homeTeamStr, Toast.LENGTH_SHORT).show();
+                            Log.i("radiotest","Position: "+position+", checkedid: "+checkedId+" team: "+currentMatch.getHomeTeam());
 
+                            String matchId=homeTeamStr+"@"+awayTeamStr;
+
+                            databaseReference = firebaseDatabase.getReference().child("users").child(uid).child("selections").child(selectedWeek);
+                            Map<String, Object> newSelection = new HashMap<>();
+                            newSelection.put("selected_team", homeTeamStr);
+
+                                databaseReference.child(matchId).updateChildren(newSelection);
 
                         } else if (checkedId == R.id.rb_away_team_selected) {
-                            if(currentMatch == matches.get(position)){
-                                rb_awaySelected.setChecked(true);
-                                rb_homeSelected.setChecked(false);
-                                currentMatch.setAwaySelected(true);
-                                currentMatch.setHomeSelected(false);
-                                awaySelected = 1; // true
-                                homeSelected = 0; // false
-                                dbHelper.AddWeeklySelected(username, selectedWeek, homeTeam, homeSelected, awayTeam, awaySelected);
-                                Toast.makeText(group.getContext(), "Selected team: " + awayTeam, Toast.LENGTH_SHORT).show();
 
-                                notifyDataSetChanged();
+                                viewHolder.awaySelected.setChecked(true);
+                                viewHolder.homeSelected.setChecked(false);
+                                currentMatch.setIsAwaySelected("1");
+                                currentMatch.setIsHomeSelected("0");
+                                Toast.makeText(group.getContext(), "Selected team: " + awayTeamStr, Toast.LENGTH_SHORT).show();
+
+                                String matchId=homeTeamStr+"@"+awayTeamStr;
+
+                                Log.i("testadapter","uid: "+uid+", selectedweek: "+selectedWeek);
+                                databaseReference = firebaseDatabase.getReference().child("users").child(uid).child("selections").child(selectedWeek);
+                                Map<String, Object> newSelection = new HashMap<>();
+                                newSelection.put("selected_team", awayTeamStr);
+
+                            Log.i("radiotest","Position: "+position+", checkedid: "+checkedId+" team: "+currentMatch.getAwayTeam());
+
+                                databaseReference.child(matchId).updateChildren(newSelection);
+
                             }
 
                         }
-                    }
                 });
             }
-            notifyDataSetChanged();
-        }
 
         return convertView;
     }

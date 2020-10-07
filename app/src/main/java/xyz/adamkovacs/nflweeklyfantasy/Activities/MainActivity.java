@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener authStateListener;
     private static final int RC_SIGN_IN = 123;
     String welcome_msg;
+    String uid;
+    int value;
 
 
     @Override
@@ -72,6 +77,29 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
                     //if the user is signed in
+                    uid = user.getUid();
+                    firebaseDatabase.getReference().child("users").child(user.getUid()).child("username").setValue(user.getDisplayName());
+                    firebaseDatabase.getReference().child("users").child(user.getUid()).child("weeklyPoints").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.getValue(Integer.class) != null){
+                                value = snapshot.getValue(Integer.class);
+                            } else {
+                                value = 0;
+                            }
+
+                            if(weeklypoints < value){
+                                weeklypoints = value;
+                            }
+                            Log.i("value","Value is: "+value);
+                            Log.i("value","WeeklyPoints is: "+weeklypoints);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            weeklypoints = 0;
+                        }
+                    });
                     onSignedIn(user.getDisplayName());
                 } else {
                     //if the user is signed out
@@ -119,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     //Attaching FirebaseAuth listener
     @Override
     protected void onResume() {
         super.onResume();
         myFirebaseAuth.addAuthStateListener(authStateListener);
+
     }
 
     //Detaching FirebaseAuth listener
@@ -144,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i("username","Username: "+username);
         tv_loggedinuser.setText(username);
         tv_welcometext.setText(welcome_msg);
-        weeklypoints = 0;
         tv_weeklypoints.setText(Integer.toString(weeklypoints));
+        Log.i("value","WeeklyPoints in onSignedIn is: "+weeklypoints);
         tv_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), WeeklyPickEmActivity.class);
+                i.putExtra("uid",uid);
+                i.putExtra("weeklyPoints",weeklypoints);
                 if(i.resolveActivity(getPackageManager()) != null)
                     startActivity(i);
             }

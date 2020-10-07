@@ -15,6 +15,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -27,7 +30,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import xyz.adamkovacs.nflweeklyfantasy.Adapters.WeeklyPickEmAdapter;
@@ -42,7 +47,6 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
     List<Match> matchList;
     ListView listView;
     NFLDatabaseHelper dbHelper;
-    String username;
     String selectedWeek;
     String api_key="?key=";  // ADD YOUR OWN API KEY HERE!
     String season="2020REG";
@@ -53,8 +57,10 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
     RadioGroup rg_selection;
     CurrentWeekAsyncTask currentWeekTask;
     CurrentWeekMatchesAsyncTask currentMatchesTask;
-
-
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    String uid;
+    int weeklyPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +73,17 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
         dbHelper = new NFLDatabaseHelper(this);
         listView = findViewById(R.id.weekly_list_view);
         rg_selection = findViewById(R.id.rg_selector);
+        firebaseDatabase = FirebaseDatabase.getInstance();
 
 
         Intent intent = getIntent();
-        username = intent.getStringExtra("Username");
+        uid = intent.getStringExtra("uid");
+        weeklyPoints = intent.getIntExtra("weeklyPoints",0);
+
+        weeklyPoints +=100;
+
+        firebaseDatabase.getReference().child("users").child(uid).child("weeklyPoints").setValue(weeklyPoints);
+
 
         callCurrentWeekMatchesTask();
 
@@ -99,7 +112,7 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
                 week_current = Integer.toString(position+1);
                 callCurrentWeekMatchesTask();
 
-                weeklyAdapter = new WeeklyPickEmAdapter(view.getContext(),R.layout.weekly_list_item,matchList,username,selectedWeek);
+                weeklyAdapter = new WeeklyPickEmAdapter(view.getContext(),R.layout.weekly_list_item,matchList,uid,selectedWeek);
                 listView.setAdapter(weeklyAdapter);
             }
 
@@ -121,11 +134,29 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
         }
     }
 
+
     void callCurrentWeekMatchesTask(){
         matches_url = matches_url_base+season+"/"+week_current+api_key;
         currentMatchesTask = new CurrentWeekMatchesAsyncTask();
         try{
             matchList = currentMatchesTask.execute(matches_url).get();
+            for (Match m: matchList
+                 ) {
+                String week = "week "+Integer.toString(m.getWeekNumber());
+                String matchId = m.getHomeTeam()+"@"+m.getAwayTeam();
+                databaseReference = FirebaseDatabase.getInstance().getReference().child("matches").child("weeks").child(week);
+
+                Map<String, Object> newMatch = new HashMap<>();
+                newMatch.put("hometeam",m.getHomeTeam());
+                newMatch.put("homescore",m.getHomeScore());
+                newMatch.put("homeselected",m.getIsHomeSelected());
+                newMatch.put("awayteam",m.getAwayTeam());
+                newMatch.put("awayscore",m.getAwayScore());
+                newMatch.put("awayselected",m.getIsAwaySelected());
+
+                databaseReference.child(matchId).updateChildren(newMatch);
+            }
+
         }catch (ExecutionException e){
             e.printStackTrace();
         } catch (InterruptedException e){
@@ -258,14 +289,14 @@ public class WeeklyPickEmActivity extends AppCompatActivity {
                     JSONObject current = elementsArray.getJSONObject(i);
                     String homeTeam,awayteam,homescore,awayscore;
                     int week;
-                    boolean homeselected,awayselected;
+                    String homeselected,awayselected;
                     week = current.getInt("Week");
                     homeTeam = current.getString("HomeTeam");
                     homescore = current.getString("HomeScore");
-                    homeselected = false;
+                    homeselected = "0";
                     awayteam=current.getString("AwayTeam");
                     awayscore=current.getString("AwayScore");
-                    awayselected=false;
+                    awayselected="0";
                     if(homescore.equals("null"))
                         homescore="0";
                     if(awayscore.equals("null")){

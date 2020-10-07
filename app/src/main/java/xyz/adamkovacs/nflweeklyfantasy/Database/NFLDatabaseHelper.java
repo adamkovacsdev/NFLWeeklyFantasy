@@ -185,7 +185,7 @@ public class NFLDatabaseHelper extends SQLiteOpenHelper {
                     email = cursor.getString(cursor.getColumnIndex("email"));
                     password = cursor.getString(cursor.getColumnIndex("password"));
                     weeklyScore = cursor.getInt(cursor.getColumnIndex("weekly_score"));
-                    users.add(new User(username,email,password,weeklyScore));
+                    users.add(new User(username,email,weeklyScore));
                 }while (cursor.moveToNext());
             }
         }

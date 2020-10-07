@@ -5,29 +5,24 @@ import java.util.ArrayList;
 public class User {
 
     String username;
-    String password;
     String email;
-    boolean isLoggedIn;
     int weekly_score;
     String placement;
 
-    public User(String username,String email, String password, int weekly_score){
+    public User(String username,String email, int weekly_score){
         this.username=username;
         this.email=email;
-        this.password=password;
         this.weekly_score=weekly_score;
     }
-    public User(String username,String email, String password, int weekly_score, String placement){
+    public User(String username,String email, int weekly_score, String placement){
         this.username=username;
         this.email=email;
-        this.password=password;
         this.weekly_score=weekly_score;
         this.placement=placement;
     }
 
-    public User(String username, String password){
+    public User(String username){
         this.username=username;
-        this.password=password;
     }
 
 
@@ -38,22 +33,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isLoggedIn() {
-        return isLoggedIn;
-    }
-
-    public void setLoggedIn(boolean loggedIn) {
-        isLoggedIn = loggedIn;
     }
 
     public String getEmail() {

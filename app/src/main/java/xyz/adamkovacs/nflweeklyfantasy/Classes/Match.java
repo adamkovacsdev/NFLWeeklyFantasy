@@ -10,13 +10,13 @@ public class Match {
 
     private int weekNumber;
     private String homeTeam,awayTeam,username;
-    private Date matchStart;
+    private String matchStart;
     private int homeScore,awayScore,homeSelectedint,awaySelectedInt;
-    private boolean homeSelected,awaySelected;
+    private String homeSelected,awaySelected;
     private String week;
 
-    public Match(int weekNumber, String homeTeam, int homeScore, boolean homeSelected, String awayTeam,
-                 int awayScore, boolean awaySelected, Date matchStart){
+    public Match(int weekNumber, String homeTeam, int homeScore, String homeSelected, String awayTeam,
+                 int awayScore, String awaySelected, String matchStart){
         this.weekNumber=weekNumber;
         this.homeTeam=homeTeam;
         this.homeScore=homeScore;
@@ -27,8 +27,8 @@ public class Match {
         this.matchStart=matchStart;
     }
 
-    public Match(int weekNumber, String homeTeam, int homeScore, boolean homeSelected, String awayTeam,
-                 int awayScore, boolean awaySelected){
+    public Match(int weekNumber, String homeTeam, int homeScore, String homeSelected, String awayTeam,
+                 int awayScore, String awaySelected){
         this.weekNumber=weekNumber;
         this.homeTeam=homeTeam;
         this.homeScore=homeScore;
@@ -46,6 +46,7 @@ public class Match {
         this.awaySelectedInt=awaySelectedInt;
         this.username=username;
     }
+
 
     public int getWeekNumber() {
         return weekNumber;
@@ -71,11 +72,11 @@ public class Match {
         this.awayTeam = awayTeam;
     }
 
-    public Date getMatchStart() {
+    public String getMatchStart() {
         return matchStart;
     }
 
-    public void setMatchStart(Date matchStart) {
+    public void setMatchStart(String matchStart) {
         this.matchStart = matchStart;
     }
 
@@ -95,19 +96,19 @@ public class Match {
         this.awayScore = awayScore;
     }
 
-    public boolean isHomeSelected() {
+    public String getIsHomeSelected() {
         return homeSelected;
     }
 
-    public void setHomeSelected(boolean homeSelected) {
+    public void setIsHomeSelected(String homeSelected) {
         this.homeSelected = homeSelected;
     }
 
-    public boolean isAwaySelected() {
+    public String getIsAwaySelected() {
         return awaySelected;
     }
 
-    public void setAwaySelected(boolean awaySelected) {
+    public void setIsAwaySelected(String awaySelected) {
         this.awaySelected = awaySelected;
     }
 
